@@ -1,1 +1,54 @@
-g
+```
+char    *get_line(char *s1, char *s2, int len)
+{
+    char    *res;
+
+    int i, j;
+    i = 0, j = 0;
+    while (s1 && s1[i])
+        i++;
+    res = malloc(i + len + 1);
+    if (!res)
+        return (NULL);
+    j = -1;
+    while (++j < i)
+        res[j] = s1[j];
+    j = -1;
+    while (++j < len)
+        res[i + j] = s2[j];
+    res[i + j] = '\0';
+    free(s1);
+    return (res);
+}
+
+
+char    *get_next_line(int fd)
+{
+    static char    buf[BUFFER_SIZE + 1];
+    char        *line;
+    int            i;
+
+    static int bytes_read, buf_index;
+    line = NULL;
+    while (1)
+    {
+        if (buf_index >= bytes_read)
+        {
+            bytes_read = read(fd, buf, BUFFER_SIZE);
+            if (bytes_read <= 0)
+                return (line);
+            buf[bytes_read] = '\0';
+            buf_index = 0;
+        }
+        i = buf_index;
+        while (i < bytes_read && buf[i] != '\n')
+            i++;
+        line = get_line(line, buf + buf_index, i - buf_index
+                + (buf[i] == '\n'));
+        buf_index = i + (buf[i] == '\n');
+        if (buf[i] == '\n')
+            return (line);
+    }
+}
+
+```
